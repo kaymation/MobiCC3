@@ -11,11 +11,12 @@ import java.io.File;
  */
 public class DisplayPhotoActivity extends DisplayFileActivity {
     private ImageView image;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         image = (ImageView) findViewById(R.id.image_space);
         File file = new File("/", "tempfile");
         image.setImageURI(Uri.fromFile(file));
-        image.
+        setContentView(R.layout.display_img);
     }
 }

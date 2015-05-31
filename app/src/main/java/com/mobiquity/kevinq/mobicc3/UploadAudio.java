@@ -1,11 +1,9 @@
 package com.mobiquity.kevinq.mobicc3;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,22 +19,21 @@ import java.io.IOException;
 /**
  * Created by Kevin Quigley on 5/31/2015.
  */
-public class UploadAudio extends UploadFile{
-    private static File returnFile;
+public class UploadAudio extends UploadFile {
     private static final String LOG_TAG = "AudioRecordTest";
-    private DropboxAPI dropboxApi;
+    private static File returnFile;
     private static String mFileName = "tempaud.mp3";
-
+    private DropboxAPI dropboxApi;
     private RecordButton mRecordButton = null;
     private MediaRecorder mRecorder = null;
 
-    private PlayButton   mPlayButton = null;
+    private PlayButton mPlayButton = null;
     private UploadButton mUploadButton = null;
     private MediaPlayer mPlayer = null;
 
 
-    public UploadAudio(Context context, DropboxAPI d, String path){
-        super(context,d,path);
+    public UploadAudio(Context context, DropboxAPI d, String path) {
+        super(context, d, path);
         dropboxApi = d;
     }
 
@@ -100,6 +97,45 @@ public class UploadAudio extends UploadFile{
         mRecorder = null;
     }
 
+    @Override
+    public void onCreate(Bundle icicle) {
+
+        LinearLayout ll = new LinearLayout(this);
+        mRecordButton = new RecordButton(this);
+        ll.addView(mRecordButton,
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        0));
+        mPlayButton = new PlayButton(this);
+        ll.addView(mPlayButton,
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        0));
+        mUploadButton = new UploadButton(this);
+        ll.addView(mUploadButton,
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        0));
+        setContentView(ll);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mRecorder != null) {
+            mRecorder.release();
+            mRecorder = null;
+        }
+
+        if (mPlayer != null) {
+            mPlayer.release();
+            mPlayer = null;
+        }
+    }
+
     class RecordButton extends Button {
         boolean mStartRecording = true;
 
@@ -144,7 +180,7 @@ public class UploadAudio extends UploadFile{
         }
     }
 
-    class UploadButton extends Button{
+    class UploadButton extends Button {
         OnClickListener clicker = new OnClickListener() {
             public void onClick(View v) {
                 try {
@@ -160,50 +196,9 @@ public class UploadAudio extends UploadFile{
             }
         };
 
-        public UploadButton(Context ctx){
+        public UploadButton(Context ctx) {
             super(ctx);
             setOnClickListener(clicker);
-        }
-    }
-
-
-    @Override
-    public void onCreate(Bundle icicle) {
-
-        LinearLayout ll = new LinearLayout(this);
-        mRecordButton = new RecordButton(this);
-        ll.addView(mRecordButton,
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        0));
-        mPlayButton = new PlayButton(this);
-        ll.addView(mPlayButton,
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        0));
-        mUploadButton = new UploadButton(this);
-        ll.addView(mUploadButton,
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        0));
-        setContentView(ll);
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mRecorder != null) {
-            mRecorder.release();
-            mRecorder = null;
-        }
-
-        if (mPlayer != null) {
-            mPlayer.release();
-            mPlayer = null;
         }
     }
 }

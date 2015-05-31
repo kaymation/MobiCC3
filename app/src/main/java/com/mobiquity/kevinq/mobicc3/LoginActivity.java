@@ -1,21 +1,15 @@
 package com.mobiquity.kevinq.mobicc3;
 
-import java.util.ArrayList;
-import java.util.logging.Logger;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
@@ -26,20 +20,18 @@ import com.dropbox.client2.session.Session.AccessType;
 import com.dropbox.client2.session.TokenPair;
 
 
-public class LoginActivity extends ActionBarActivity implements OnClickListener{
+public class LoginActivity extends ActionBarActivity implements OnClickListener {
 
+    private final static String DROPBOX_NAME = "dropbox_prefs";
+    private final static String ACCESS_KEY = "cz18cxra5gt2e3g";
+    private final static String ACCESS_SECRET = "chasvfmu23eszmk";
+    private final static AccessType ACCESS_TYPE = AccessType.DROPBOX;
     private LinearLayout container;
     private DropboxAPI dropboxApi;
     private boolean isUserLoggedIn;
     private Button loginButton;
     private Button uploadFileBtn;
     private Button listFileBtn;
-
-    private final static String DROPBOX_FILE_DIR = "/DropboxDemo/";
-    private final static String DROPBOX_NAME = "dropbox_prefs";
-    private final static String ACCESS_KEY = "cz18cxra5gt2e3g";
-    private final static String ACCESS_SECRET = "chasvfmu23eszmk";
-    private final static AccessType ACCESS_TYPE = AccessType.DROPBOX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +55,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener{
         String key = prefs.getString(ACCESS_KEY, null);
         String secret = prefs.getString(ACCESS_SECRET, null);
 
-        if(key != null && secret != null) {
+        if (key != null && secret != null) {
             AccessTokenPair token = new AccessTokenPair(key, secret);
             session = new AndroidAuthSession(appKeyPair, ACCESS_TYPE, token);
         } else {
@@ -77,8 +69,8 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener{
     protected void onResume() {
         super.onResume();
 
-        AndroidAuthSession session = (AndroidAuthSession)dropboxApi.getSession();
-        if(session.authenticationSuccessful()) {
+        AndroidAuthSession session = (AndroidAuthSession) dropboxApi.getSession();
+        if (session.authenticationSuccessful()) {
             try {
                 session.finishAuthentication();
 
@@ -100,7 +92,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.loginBtn:
-                if(isUserLoggedIn){
+                if (isUserLoggedIn) {
                     dropboxApi.getSession().unlink();
                     loggedIn(false);
                 } else {
@@ -111,6 +103,11 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener{
             case R.id.uploadFileBtn:
                 Intent photoIntent = new Intent(this, UploadPhoto.class);
                 startActivity(photoIntent);
+                break;
+
+            case R.id.recordSoundBtn:
+                Intent soundIntent = new Intent(this, UploadAudio.class);
+                startActivity(soundIntent);
                 break;
 
             case R.id.listFilesBtn:

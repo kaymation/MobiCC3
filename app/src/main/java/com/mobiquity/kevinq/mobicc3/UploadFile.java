@@ -1,28 +1,24 @@
 package com.mobiquity.kevinq.mobicc3;
 
 /**
- * Created by mikeq on 5/29/2015.
+ * Created by Kevin Quigley on 5/29/2015.
  */
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.exception.DropboxException;
 
-public class UploadFile extends Activity{
+import java.io.File;
+import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class UploadFile extends Activity {
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
@@ -38,41 +34,17 @@ public class UploadFile extends Activity{
         this.context = context;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState){
-
-
-        try {
-            File file = this.doCapture();//will be unique for every child
-            FileInputStream fileInputStream = new FileInputStream(file);
-            dropboxApi.putFile(path + file.getName() , fileInputStream,
-                    file.length(), null, null);
-            file.delete();
-
-            return;
-        } catch (Exception e){
-
-//        } catch (IOException ioe) {
-//
-//        } catch (DropboxException de) {
-        }
-        return;
-    }
-    public String getPath(){
-        return path;
-    }
-
-    public File doCapture(){
-        return null;
-    }
-
-    /** Create a file Uri for saving an image or video */
-    protected static Uri getOutputMediaFileUri(int type){
+    /**
+     * Create a file Uri for saving an image or video
+     */
+    protected static Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
     }
 
-    /** Create a File for saving an image or video */
-    protected static File getOutputMediaFile(int type){
+    /**
+     * Create a File for saving an image or video
+     */
+    protected static File getOutputMediaFile(int type) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
@@ -82,8 +54,8 @@ public class UploadFile extends Activity{
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
                 Log.d("MyCameraApp", "failed to create directory");
                 return null;
             }
@@ -92,17 +64,46 @@ public class UploadFile extends Activity{
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE){
+        if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
-        } else if(type == MEDIA_TYPE_VIDEO) {
+                    "IMG_" + timeStamp + ".jpg");
+        } else if (type == MEDIA_TYPE_VIDEO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_"+ timeStamp + ".mp4");
+                    "VID_" + timeStamp + ".mp4");
         } else {
             return null;
         }
 
         return mediaFile;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+
+        try {
+            File file = this.doCapture();//will be unique for every child
+            FileInputStream fileInputStream = new FileInputStream(file);
+            dropboxApi.putFile(path + file.getName(), fileInputStream,
+                    file.length(), null, null);
+            file.delete();
+
+            return;
+        } catch (Exception e) {
+
+//        } catch (IOException ioe) {
+//
+//        } catch (DropboxException de) {
+        }
+        return;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public File doCapture() {
+        return null;
     }
 
 

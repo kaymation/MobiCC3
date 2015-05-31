@@ -1,14 +1,11 @@
 package com.mobiquity.kevinq.mobicc3;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.view.View.OnClickListener;
-
-import java.util.ArrayList;
 
 /**
  * Created by mikeq on 5/30/2015.
@@ -19,7 +16,7 @@ public class ImageAdapter extends ArrayAdapter<ListFiles.Viewtry> {
 
 
     public ImageAdapter(Context c, int grid, ListFiles.Viewtry[] b) {
-        super(c,grid,b);
+        super(c, grid, b);
         mThumbs = b;
     }
 
@@ -42,7 +39,7 @@ public class ImageAdapter extends ArrayAdapter<ListFiles.Viewtry> {
             imageView = (ImageView) convertView;
         }
         imageView.setImageBitmap(mThumbs[position].bitmap);
-        imageView.setTag(1,mThumbs[position].entry);
+        imageView.setTag(1, mThumbs[position].entry);
 
         final OnClickListener imgViewListener = new OnClickListener() {
             @Override
